@@ -1,5 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
+-odac           -iadc    ; -d     ;;;RT audio I/O
 </CsOptions>
 
 <CsInstruments>
@@ -8,16 +9,19 @@ ksmps = 128
 nchnls = 2
 0dbfs = 1
 
-instr 1
-kFreq line 100, 5, 1000
-aOut oscili 0.2, kFreq, 1
-outvalue "freqsweep", kFreq
-outs aOut, aOut
-endin
+        FLpanel         "Super controller",550,550,100,100 ;***** start of container
+gknob1, ihandle1 FLknob "amp", 20, 1000, 0, 1, -1, 200, 20, 120
+gknob2, ihandle2 FLknob "freq", 1, 200, 0, 1, -1, 200, 250, 120
+        FLpanelEnd      ;***** end of container
 
-instr 2
+        FLrun           ;***** runs the widget thread, it is always required!
+
+instr 1
+kline line 20, 100, 1000
+aOut1 poscil kline, gknob2, 1
+
 kFreq expon 100, 5, 1000
-aOut oscili 0.2, kFreq, 1
+aOut poscil 0.2, aOut1, 1
 outvalue "freqsweep", kFreq
 outs aOut, aOut
 endin
@@ -25,7 +29,6 @@ endin
 
 <CsScore>
 f 1 0 1024 10 1
-i 1 0 5
-i 2 5 5
+i 1 0 100
 </CsScore>
 </CsoundSynthesizer>
